@@ -1,0 +1,35 @@
+# 3D plots
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import os
+import itertools
+from mpl_toolkits.mplot3d import Axes3D
+
+
+f = pd.read_csv('housing.data',sep='\s+',header=None)
+df = pd.DataFrame(f)
+
+df.columns =['CRIM','ZN','INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT','MEDV']
+
+print(df.columns)
+
+#multiple plot on the same figure
+
+os.makedirs('plots/homework-matplotlib_dataset_3D graphs', exist_ok=True)
+
+
+for col0, col1, col2 in list(itertools.combinations(df.columns, 3)):
+    fig = plt.figure(figsize=(6, 6))
+    axes = fig.add_subplot(1, 1, 1, projection='3d')
+    fig.suptitle(f'{col0} to {col1} to {col2}')
+
+    axes.scatter(df[col0], df[col1], df[col2], c='Red', marker='s',
+                 alpha=0.6, edgecolors='black', cmap='YlGn')
+
+    axes.set_xlabel(col0)
+    axes.set_ylabel(col1)
+    axes.set_zlabel(col2)
+    axes.legend()
+    plt.savefig(f'plots/3d/boston_{col0}_{col1}_{col2}_scatter.png', dpi=300)
+    plt.close(fig)
